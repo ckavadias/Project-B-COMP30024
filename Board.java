@@ -32,5 +32,9 @@ public class Board {
 	public void setGameboard(char[][] gameboard) {
 		this.gameboard = gameboard;
 	}
+	
+	public char getChar(int x, int y) {
+		return gameboard[y][x];
+	}
 
 }

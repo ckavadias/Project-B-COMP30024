@@ -11,7 +11,7 @@ public class vPiece extends piece {
 		char cell;
 		
 		// can't move down only check remaining three directions
-		if (vertical + this.getyLoc() < 0){
+		if (vertical < 0 || horizontal + this.getxLoc() == board.getN()){
 			return false;
 		}
 		
@@ -21,7 +21,7 @@ public class vPiece extends piece {
 		}
 		
 		//check that specified cell is empty
-		cell = board.getGameboard()[this.getxLoc()][this.getyLoc()];
+		cell = board.getChar(getxLoc() + horizontal, getyLoc() + vertical);
 		
 		if (cell == '+'){
 			return true;
