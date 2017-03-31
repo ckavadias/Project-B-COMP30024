@@ -1,0 +1,31 @@
+Pseudocode summary of the algorithm:
+
+  int numLegalHMoves, numLegalVMoves = 0
+  ArrayList<piece> vertical, horizontal
+
+  for(every position on Board) {
+    char readchar <- (scan the character in the position)
+    if(readchar == 'V') {
+      vertical.add(new vPiece)
+    } else if (readchar == 'H') {
+      horizontal.add(new hPiece)
+    }
+  }
+
+  for(vPiece thePiece : vertical)
+			numLegalVMoves += checkMoves(thePiece, gameBoard);
+	}
+	for(hPiece thePiece : horizontal) {
+			numLegalHMoves += checkMoves(thePiece, gameBoard);
+	}
+
+  return numLegalHMoves, numLegalVMoves
+
+
+Time Complexity: O(n^2)
+- This is because our code is required to scan the whole
+  board with the size of n.
+
+Any additional comments:
+  The reason why we add each piece into a seperate ArrayList is to ease our
+  counting process without the need to re-scan the whole board.

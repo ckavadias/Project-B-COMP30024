@@ -1,10 +1,16 @@
-package projectA;
+/**
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
+ */
+
+package rtanudjaja.slider;
 
 public abstract class piece {
 	
 	private int xLoc;
 	private int yLoc;
 	
+	/* Constructor */
 	public piece(int horizontalLocation, int verticalLocation) {
 		this.xLoc = horizontalLocation;
 		this.yLoc = verticalLocation;

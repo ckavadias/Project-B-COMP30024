@@ -1,4 +1,9 @@
-package projectA;
+/**
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
+ */
+
+package rtanudjaja.slider;
 
 public class hPiece extends piece {
 
@@ -10,15 +15,13 @@ public class hPiece extends piece {
 	public boolean move(int horizontal, int vertical, Board board) {
 		char cell;
 		
-		// can't move to the left only check remaining three directions
+		// can't move to the left and go outside the board in vertical direction
 		if (horizontal < 0 || vertical + this.getyLoc() == board.getN()){
-			//System.out.println("A Error for " + this.getxLoc() + "," + this.getyLoc());
 			return false;
 		}
 		
 		//need to have provision for leaving the board
 		if((horizontal + this.getxLoc() == board.getN()) && (vertical + this.getyLoc() < board.getN())){
-			//System.out.println("1 Counting for " + this.getxLoc() + "," + this.getyLoc());
 			return true;
 		}
 		
@@ -26,12 +29,10 @@ public class hPiece extends piece {
 		cell = board.getChar(getxLoc() + horizontal, getyLoc() + vertical);
 		
 		if (cell == '+'){
-			//System.out.println("2 Counting for " + this.getxLoc() + "," + this.getyLoc());
 			return true;
 		}
 		
 		else{
-			//System.out.println("B Error for " + this.getxLoc() + "," + this.getyLoc());
 			return false;
 		}
 	}

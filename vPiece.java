@@ -1,4 +1,9 @@
-package projectA;
+/**
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
+ */
+
+package rtanudjaja.slider;
 
 public class vPiece extends piece {
 	
@@ -10,7 +15,7 @@ public class vPiece extends piece {
 	public boolean move(int horizontal, int vertical, Board board) {
 		char cell;
 		
-		// can't move down only check remaining three directions
+		// can't move down and go outside the board in horizontal direction
 		if (vertical < 0 || horizontal + this.getxLoc() == board.getN()){
 			return false;
 		}
