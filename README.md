@@ -1,5 +1,5 @@
 # aiProject
-This is the project to guide me in making COMP30024 AI Project
+This is for PROJECT B yeah
 
 Right now it only contains 5 files to tackle Task1:
 1. Board.java
