@@ -13,7 +13,7 @@ public class vPiece extends piece {
 	
 	@Override
 	public boolean move(int horizontal, int vertical, Board board) {
-		char cell;
+		char cell ;
 		
 		// can't move down and go outside the board in horizontal direction
 		if (vertical < 0 || horizontal + this.getxLoc() == board.getN()){
@@ -26,13 +26,16 @@ public class vPiece extends piece {
 		}
 		
 		//check that specified cell is empty
-		cell = board.getChar(getxLoc() + horizontal, getyLoc() + vertical);
-		
-		if (cell == '+'){
-			return true;
-		}
-		
-		else{
+		try {
+			cell = board.getChar(getxLoc() + horizontal, getyLoc() + vertical);
+			if (cell == '+'){
+				return true;
+			}
+			
+			else{
+				return false;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
 		}
 	}
