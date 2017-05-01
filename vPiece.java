@@ -39,4 +39,8 @@ public class vPiece extends piece {
 			return false;
 		}
 	}
+	
+	public boolean is_h(){
+		return false;
+	}
 }

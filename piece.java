@@ -33,5 +33,7 @@ public abstract class piece {
 	public void setyLoc(int yLoc) {
 		this.yLoc = yLoc;
 	}
+	
+	public abstract boolean is_h();
 
 }
