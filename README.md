@@ -1,4 +1,4 @@
-sho# aiProject - Slider Game
+# aiProject - Slider Game
 ## By Con Kavadias and Ricky Tanudjaja
 
 This is document is used to record information about our "SliderPlayer" class for Slider game.
