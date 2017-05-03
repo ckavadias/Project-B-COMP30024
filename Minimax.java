@@ -4,11 +4,17 @@
  */
 package CKRTsliderbot;
 
+//library downloaded from www.javatuples.org
+import org.javatuples.*;
+
 public final class Minimax {
 
 }
 
 private int maxPly = 2;
+private Pair<int, int>[] possibleMoves = {new Pair<int, int>(0,1), new Pair<int, int>(1,0), 
+		new Pair<int,int>(-1,0), new Pair<int, int>(0,-1)};
+
 
 //return heuristic value for thisPiece, heuristic is absolute distance from goal plus number of
 //blocks on the path
@@ -62,7 +68,17 @@ public static Move choose_move(Board board, ArrayList enemies, ArrayList myPiece
 private Move find_max(Board board, ArrayList enemies, ArrayList myPieces, int ply, piece thePiece){
 	
 	if (ply == maxPly){
-		//return heuristics don't proceed to further depth
+		
+		//return heuristics of next moves don't proceed to further depth
+		//for possible moves, if legal, update board, determine heuristic, undo update
+		for(Pair<int,int> thisMove : moves){
+			if(thisPiece.move(thisMove.getValue0(), thisMove.getValue1(), board){
+				//update board
+				//heuristic
+				//reverse update
+			}
+			
+		}
 	}
 	
 	else{
