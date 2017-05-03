@@ -88,5 +88,33 @@ public class SliderBot1 implements SliderPlayer {
 	public Move move() {
 		return null;
 	}
+	
+	public void change_place(Move move, Board board, piece thePiece){
+		char player = 'V';
+		
+		if(thePiece.isH()){
+			player = 'H'
+		}
+		
+		board[move.i, move.j] = '+';
+		
+		switch(move.d):
+			case Move.direction.UP:
+				thePiece.setyLoc(move.j + 1);
+				board.enter[move.i][move.j + 1] = player;
+				break;
+			case Move.direction.DOWN:
+				thePiece.setyLoc(move.j -1);
+				board.enter[move.i][move.j - 1] = player;
+				break;
+			case Move.direction.LEFT:
+				thePiece.setxLoc(move.i - 1);
+				board.enter[move.i - 1][move.j] = player;
+				break;
+			case Move.direction.RIGHT:
+				thePiece.setxLoc(move.i + 1);
+				board.enter[move.i + 1][move.j] = player;
+				break;
+	}
 
 }

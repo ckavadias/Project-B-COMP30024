@@ -12,9 +12,24 @@ public class hPiece extends piece {
 	}
 	
 	@Override
-	public boolean move(int horizontal, int vertical, Board board) {
+	public boolean move(Move movement, Board board) {
 		char cell;
+		int horizontal = 0, vertical = 0;
 		
+		switch (movement.d):
+			case Move.Direction.UP:
+				vertical = 1;
+				break;
+			case Move.Direction.DOWN:
+				vertical = -1;
+				break;
+			case Move.Direction.LEFT:
+				horizontal = -1;
+				break;
+			case Move.Direction.RIGHT:
+				horizontal = 1;
+				break;
+				
 		// can't move to the left and go outside the board in vertical direction
 		if (horizontal < 0 || vertical + this.getyLoc() == board.getN()){
 			return false;
@@ -40,7 +55,7 @@ public class hPiece extends piece {
 		}
 	}
 	
-	public boolean is_h(){
+	public boolean isH(){
 		return true;
 	}
 

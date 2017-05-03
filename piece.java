@@ -16,7 +16,7 @@ public abstract class piece {
 		this.yLoc = verticalLocation;
 	}
 	
-	public abstract boolean move(int horizontal, int vertical, Board board);
+	public abstract boolean move(Move movement, Board board);
 
 	public int getxLoc() {
 		return xLoc;
@@ -34,6 +34,6 @@ public abstract class piece {
 		this.yLoc = yLoc;
 	}
 	
-	public abstract boolean is_h();
+	public abstract boolean isH();
 
 }
