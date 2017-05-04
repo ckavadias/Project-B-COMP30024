@@ -67,20 +67,26 @@ private Pair<Move, int> find_min(Board board, ArrayList enemies, ArrayList myPie
 		int ply,Pair<Move, int> maximum, piece thePiece){
 	
 	Pair<Move, int> returnValue;
-	int current, minimum = board.getN()*board.getN();
-	Move chosen = new Move(0,0, Move.Direction.UP);
-	Move move = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), Move.Direction.UP);
+	int current, minimum = board.getN()*board.getN(), i = 0;
+	Move chosen, move;
+	Move[] possibles = new Move[4];
+	
+	//create array of possible moves to iterate through
+	for(Move.direction d : Move.Direction.values()){
+		possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(),d);
+		i++;
+	}
 	
 	if (ply == maxPly){
 		
 		//return heuristics of next moves don't proceed to further depth
 		//for possible moves, if legal, update board, determine heuristic, undo update
 		
-		for(Move.Direction d : Move.Direction.values()){
+		for(Move thisMove : possibles){
 			
-			if(thisPiece.move(move, board){
+			if(thisPiece.move(thisMove, board){
 				//update board
-				SliderBot1.change_place(move, board, thePiece);
+				SliderBot1.change_place(thisMove, board, thePiece);
 				
 				//heuristic
 				current = heuristic(board, thePiece);
@@ -91,12 +97,10 @@ private Pair<Move, int> find_min(Board board, ArrayList enemies, ArrayList myPie
 				}
 				if(current < minimum){
 					minimum = current;
-					chosen.i = move.i;
-					chosen.j = move.j;
-					chosen.d = move.d;
+					chosen = thisMove;
 				}
 				//reverse update
-				move.d = find_opposite(move.d);
+				move = find_opposite(thisMove);
 				SliderBot1.change_place(move, board, thePiece)
 				
 			}
@@ -107,11 +111,11 @@ private Pair<Move, int> find_min(Board board, ArrayList enemies, ArrayList myPie
 	else{
 		//proceed to next depth
 		current = board.getN()*board.getN;
-		for(Move.Direction d : Move.Direction.values()){
+		for(Move thisMove : possibles){
 			
-			if(thisPiece.move(move, board){
+			if(thisPiece.move(thisMove, board){
 				//update board
-				SliderBot1.change_place(move, board, thePiece);
+				SliderBot1.change_place(thisMovemove, board, thePiece);
 				//find minimum of the enemy heuristics given this move
 				current = find_max(myPieces, enemies, ply + 1, board, current);
 				
@@ -122,12 +126,10 @@ private Pair<Move, int> find_min(Board board, ArrayList enemies, ArrayList myPie
 				
 				if(current < minimum){
 					minimum = current;
-					chosen.i = move.i;
-					chosen.j = move.j;
-					chosen.d = move.d;
+					chosen = thisMove;
 				}
 				//reverse update
-				move.d = find_opposite(move.d);
+				move = find_opposite(move);
 				SliderBot1.change_place(move, board, thePiece)
 				
 			}
@@ -180,17 +182,17 @@ private int find_max(ArrayList enemies, ArrayList myPieces, int ply, Board board
 	return maximum;
 }
 //find out reverse of direction d
-private Move.Direction find_opposite(Move.Direction d){
+private Move find_opposite(Move theMove){
 	
-	switch (d):
+	switch (theMove.d):
 		case Move.Direction.UP:
-			return Move.Direction.DOWN;
+			return new Move(theMove.i - 1, theMove.j, Move.Direction.DOWN);
 		case Move.Direction.DOWN:
-			return Move.Direction.UP;
+			return new Move(theMove.i + 1, theMove.j,Move.Direction.UP);
 		case Move.Direction.LEFT:
-			return Move.Direction.RIGHT;
+			return new Move(theMove.i, theMove.j + 1, Move.Direction.RIGHT);
 		case Move.Direction.Right:
-			return Move.Direction.LEFT;
+			return new Move(theMove.i, theMove.j - 1 ,Move.Direction.LEFT);
 }
 
 
