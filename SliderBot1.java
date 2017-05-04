@@ -2,20 +2,34 @@ package CKRTsliderbot;
 
 import java.util.Scanner;
 
+import aiproj.slider.Move;
+import aiproj.slider.SliderPlayer;
+
+/** 
+ * SliderBot1 class: This bot plays the game of Slider
+ * with the A* algorithm to determine the best path
+ * and use random pieces chosen to choose the piece to move
+ */
 public class SliderBot1 implements SliderPlayer {
 	
 	/* attributes */
 	private Scanner boardScan = null;
 	private Board gameBoard = null;
 	private char player;
-
-	public SliderBot1() {
-		// TODO Auto-generated constructor stub
-	}
+	private char opponent;
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
 		System.out.println("player: " + this.player);
+		
+		if(player == Global.H_CELL) {
+			this.opponent = Global.V_CELL;
+		} else {
+			this.opponent = Global.H_CELL;
+		}
+		
+		System.out.println("opponent: " + this.opponent);
+		
 		this.gameBoard = new Board(dimension);
 		System.out.println("dimension: " + dimension);
 		
@@ -32,7 +46,43 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public void update(Move move) {
-		
+		try {
+			if (move == null) {
+				return;
+			} else {
+				
+				/* switch case for direction the piece is moving 
+				 * set the new position to the opponent's piece */
+				switch(move.d) {
+				case UP:
+					if(this.opponent == 'V' && move.j == this.gameBoard.getN() - 1) {
+						break;
+					}
+					this.gameBoard.setChar(move.i, move.j + 1, this.opponent);
+					break;
+				case DOWN:
+					this.gameBoard.setChar(move.i, move.j - 1, this.opponent);
+					break;
+				case LEFT:
+					this.gameBoard.setChar(move.i - 1, move.j, this.opponent);
+					break;
+				case RIGHT:
+					if(this.opponent == 'H' && move.i == this.gameBoard.getN() - 1) {
+						break;
+					}
+					this.gameBoard.setChar(move.i + 1, move.j, this.opponent);
+					break;
+				}
+				
+				/* set the old position to blank */
+				this.gameBoard.setChar(move.i, move.j, Global.BLANK);
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		} finally {
+			/********************************************FOR TESTING PURPOSES********************************************/
+			this.gameBoard.print();
+		}
 	}
 	
 	public Move move() {
