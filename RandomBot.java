@@ -60,27 +60,28 @@ public class RandomBot implements SliderPlayer{
 			if (move == null) {
 				return;
 			} else {
+				char thePiece = this.gameBoard.getChar(move.i, move.j);
 				
 				/* switch case for direction the piece is moving 
 				 * set the new position to the opponent's piece */
 				switch(move.d) {
 					case UP:
-						if(this.opponent == 'V' && move.j == this.gameBoard.getN() - 1) {
+						if(thePiece == 'V' && move.j == this.gameBoard.getN() - 1) {
 							break;
 						}
-						this.gameBoard.setChar(move.i, move.j + 1, this.opponent);
+						this.gameBoard.setChar(move.i, move.j + 1, thePiece);
 						break;
 					case DOWN:
-						this.gameBoard.setChar(move.i, move.j - 1, this.opponent);
+						this.gameBoard.setChar(move.i, move.j - 1, thePiece);
 						break;
 					case LEFT:
-						this.gameBoard.setChar(move.i - 1, move.j, this.opponent);
+						this.gameBoard.setChar(move.i - 1, move.j, thePiece);
 						break;
 					case RIGHT:
-						if(this.opponent == 'H' && move.i == this.gameBoard.getN() - 1) {
+						if(thePiece == 'H' && move.i == this.gameBoard.getN() - 1) {
 							break;
 						}
-						this.gameBoard.setChar(move.i + 1, move.j, this.opponent);
+						this.gameBoard.setChar(move.i + 1, move.j, thePiece);
 						break;
 				}
 				
@@ -173,27 +174,8 @@ public class RandomBot implements SliderPlayer{
 		System.out.println(selected_move.toString());
 		
 		/* self update the state of the game board */
-		this.gameBoard.setChar(piece_location[0], piece_location[1], Global.BLANK);
-		switch(selected_move.d) {
-		case UP:
-			if(this.player == 'V' && piece_location[1]==this.gameBoard.getN()-1) {
-				break;
-			}
-			this.gameBoard.setChar(piece_location[0], piece_location[1] + 1, this.player);
-			break;
-		case DOWN:
-			this.gameBoard.setChar(piece_location[0], piece_location[1] - 1, this.player);
-			break;
-		case LEFT:
-			this.gameBoard.setChar(piece_location[0] - 1, piece_location[1], this.player);
-			break;
-		case RIGHT:
-			if(this.player == 'H' && piece_location[0]==this.gameBoard.getN()-1) {
-				break;
-			}
-			this.gameBoard.setChar(piece_location[0] + 1, piece_location[1], this.player);
-			break;
-		}
+		System.out.println("self-update");
+		this.update(selected_move);
 		
 		return selected_move;
 	}
