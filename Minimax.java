@@ -6,6 +6,8 @@ package CKRTsliderbot;
 
 //library downloaded from www.javatuples.org
 import org.javatuples.*;
+import aiproj.slider.Move;
+import aiproj.slider.SliderPlayer;
 
 public final class Minimax {
 
@@ -24,7 +26,7 @@ private int heuristic(Board board, piece thisPiece){
 		
 		//iterate horizontally and record blocks
 		for( i = x + 1; i < board.getN){
-			if(board.getChar(i, y) != '+'){
+			if(board.getChar(i, y) != Global.BLANK_CELL){
 				result++;
 			}
 		}
@@ -35,7 +37,7 @@ private int heuristic(Board board, piece thisPiece){
 		
 		//iterate vertically and record blocks
 				for( j = y + 1; j < board.getN){
-					if(board.getChar(x, j) != '+'){
+					if(board.getChar(x, j) != Global.BLANK_CELL){
 						result++;
 					}
 				}
@@ -59,7 +61,7 @@ public static Move choose_move(Board board, ArrayList enemies, ArrayList myPiece
 	}
 	
 	//perform minimax on thePiece returning move 
-	return find_min(board, enemies, myPieces, ply, <Move.Direction.UP,0>, thePiece).getValue1;
+	return find_min(board, enemies, myPieces, ply, <Move.Direction.UP,0>, thePiece).getValue0;
 }
 
 //find minimum of maximums, returns a tuple of the minimum and the move that gives it

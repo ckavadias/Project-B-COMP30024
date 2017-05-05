@@ -1,10 +1,10 @@
 package CKRTsliderbot;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import aiproj.slider.Move;
 import aiproj.slider.SliderPlayer;
-
 /** 
  * SliderBot1 class: This bot plays the game of Slider
  * with the A* algorithm to determine the best path
@@ -95,17 +95,38 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public Move move() {
-		return null;
+		Move chosen;
+		//implement minimax
+		if(player == Global.V_CELL){
+			chosen = choose_move(gameBoard, horizontal, vertical);
+			change_place(chosen, gameBoard,find_piece(vertical, chosen));
+		}
+		else{
+			chosen = choose_move(gameBoard, vertical, horizontal);
+			change_place(chosen, gameBoard,find_piece(horizontal, chosen));
+		}
+		return chosen;
+	}
+	
+	//find the piece being moved in the ArrayList of pieces
+	private piece find_piece(ArrayList pieces, move theMove){
+		for(piece thePiece : pieces){
+			if(thePiece.getxLoc() == theMove.i){
+				if(thePiece.getyLoc() == theMove.j){
+					return thePiece;
+				}
+			}
+		}
 	}
 	
 	public void change_place(Move move, Board board, piece thePiece){
-		char player = 'V';
+		char player = Global.V_CELL;
 		
 		if(thePiece.isH()){
-			player = 'H'
+			player = Global.H_CELL;
 		}
 		
-		board[move.i, move.j] = '+';
+		board[move.i, move.j] = Global.BLANK_CELL;
 		
 		switch(move.d):
 			case Move.direction.UP:
