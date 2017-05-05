@@ -17,6 +17,8 @@ public class SliderBot1 implements SliderPlayer {
 	private Board gameBoard = null;
 	private char player;
 	private char opponent;
+	private ArrayList<vPiece> vertical = new ArrayList<vPiece>();
+	private ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
@@ -40,6 +42,13 @@ public class SliderBot1 implements SliderPlayer {
 				char readChar = boardScan.next().charAt(0);
 				System.out.printf("%c ",readChar);
 				gameBoard.enter(readChar, y, x);
+				
+				if(gameBoard.getChar(x, y) == 'V'){
+					vertical.add(new vPiece(x, y));
+				}
+				else if(gameBoard.getChar(x, y) == 'H'){
+					horizontal.add(new hPiece(x, y));
+				}
 			}
 			System.out.println();
 		}
