@@ -59,27 +59,28 @@ public class SliderBot1 implements SliderPlayer {
 			if (move == null) {
 				return;
 			} else {
-				
+				char thePiece = this.gameBoard.getChar(move.i, move.j);
+
 				/* switch case for direction the piece is moving 
 				 * set the new position to the opponent's piece */
 				switch(move.d) {
 				case UP:
-					if(this.opponent == 'V' && move.j == this.gameBoard.getN() - 1) {
+					if(thePiece == 'V' && move.j == this.gameBoard.getN() - 1) {
 						break;
 					}
-					this.gameBoard.setChar(move.i, move.j + 1, this.opponent);
+					this.gameBoard.setChar(move.i, move.j + 1, thePiece);
 					break;
 				case DOWN:
-					this.gameBoard.setChar(move.i, move.j - 1, this.opponent);
+					this.gameBoard.setChar(move.i, move.j - 1, thePiece);
 					break;
 				case LEFT:
-					this.gameBoard.setChar(move.i - 1, move.j, this.opponent);
+					this.gameBoard.setChar(move.i - 1, move.j, thePiece);
 					break;
 				case RIGHT:
-					if(this.opponent == 'H' && move.i == this.gameBoard.getN() - 1) {
+					if(thePiece == 'H' && move.i == this.gameBoard.getN() - 1) {
 						break;
 					}
-					this.gameBoard.setChar(move.i + 1, move.j, this.opponent);
+					this.gameBoard.setChar(move.i + 1, move.j, thePiece);
 					break;
 				}
 				
@@ -95,6 +96,10 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public Move move() {
+		/*the 'update' should update the state of the board (can be used for any Move) */
+		Move selected_move = null;
+		this.update(selected_move);
+		
 		return null;
 	}
 	
