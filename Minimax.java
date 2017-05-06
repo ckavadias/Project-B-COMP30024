@@ -18,6 +18,7 @@ private static int maxPly = 2;
 private static int heuristicH(Board board, hPiece thisPiece){
 	int x = thisPiece.getxLoc(), y = thisPiece.getyLoc(), result = 0, i;
 	
+	result += board.getN() - x;
 		//iterate horizontally and record blocks
 		for( i = x + 1; i < board.getN(); i++){
 			if(board.getChar(i, y) != Global.BLANK){
@@ -51,12 +52,12 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces, ArrayList
 	
 	if(player == Global.H_CELL){
 		//perform minimax on thePiece returning move 
-		return findH_min(board,hPieces,vPieces,ply,0);
+		return findH_min(board,hPieces,vPieces,ply,minimum);
 	}
 	
 	else{
 		//perform minimax on thePiece returning move 
-		return findV_min(board,hPieces, vPieces,ply,0);
+		return findV_min(board,hPieces, vPieces,ply,minimum);
 	}
 	
 }
@@ -65,7 +66,7 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces, ArrayList
 private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces, 
 		int ply,int maximum){
 	
-	int current, minimum = board.getN()*board.getN(), i = 0;
+	int current, minimum = 0, i = 0;
 	char player = Global.H_CELL;
 	Move chosen = null, move = null;
 	Move[] possibles = new Move[3];
@@ -115,7 +116,7 @@ private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 	
 	else{
 		//proceed to next depth
-		current = board.getN()*board.getN();
+		current = 0;
 		for(hPiece thisPiece : hPieces){
 			i=0;
 			for(Move.Direction d : Move.Direction.values()){
@@ -134,11 +135,11 @@ private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 				current = find_max(hPieces, vPieces, ply + 1, board, current, player);
 				
 				//Pruning condition
-				if(current < maximum){
+				if(current > maximum){
 					return null;
 				}
 				
-				if(current < minimum){
+				if(current > minimum){
 					minimum = current;
 					chosen = thisMove;
 				}
@@ -157,7 +158,7 @@ private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces, 
 		int ply,int maximum){
 	
-	int current, minimum = board.getN()*board.getN(), i = 0;
+	int current, minimum = 0, i = 0;
 	char player = Global.V_CELL;
 	Move chosen = null, move = null;
 	Move[] possibles = new Move[3];
@@ -166,7 +167,7 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 	//create array of possible moves to iterate through
 	
 	if (ply == maxPly){
-		
+	
 		//return heuristics of next moves don't proceed to further depth
 		//for possible moves, if legal, update board, determine heuristic, undo update
 		
@@ -205,8 +206,9 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 	}
 	
 	else{
+		
 		//proceed to next depth
-		current = board.getN()*board.getN();
+		current = 0;
 		for(vPiece thisPiece : vPieces){
 			i = 0;
 			for(Move.Direction d : Move.Direction.values()){
@@ -218,17 +220,20 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 			for(Move thisMove : possibles){
 				
 			if(thisPiece.move(thisMove, board)){
+			
 				//update board
 				SliderBot1.change_place(thisMove, board, thisPiece);
 				//find minimum of the enemy heuristics given this move
 				current = find_max(hPieces, vPieces, ply + 1, board, current, player);
-				
+
 				//Pruning condition
-				if(current < maximum){
+				if(current > maximum){
+				
 					return null;
 				}
 				
-				if(current < minimum){
+				if(current > minimum){
+		
 					minimum = current;
 					chosen = thisMove;
 				}
@@ -248,7 +253,7 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 //find maximum of minimums, return maximum
 private static int find_max(ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces, int ply, Board board, 
 		int minimum, char player){
-	int current = 0, maximum = 0;
+	int current = 0, maximum = board.getN()*board.getN();
 	
 	if(ply == maxPly){
 		
@@ -257,12 +262,12 @@ private static int find_max(ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces
 			for(vPiece thisPiece : vPieces){
 			
 				current = heuristicV(board, thisPiece);
-				if(current > minimum){
+				if(current < minimum){
 					//pruning condition
 					return minimum;
 				}
 				
-				else if (current > maximum){
+				else if (current < maximum){
 					maximum = current;
 				}
 			}
@@ -273,12 +278,13 @@ private static int find_max(ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces
 			for(hPiece thisPiece : hPieces){
 			
 				current = heuristicH(board, thisPiece);
-				if(current > minimum){
+				
+				if(current < minimum){
 					//pruning condition
 					return minimum;
 				}
 				
-				else if (current > maximum){
+				else if (current < maximum){
 					maximum = current;
 				}
 			}
