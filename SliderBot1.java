@@ -17,8 +17,8 @@ public class SliderBot1 implements SliderPlayer {
 	private Board gameBoard = null;
 	private char player;
 	private char opponent;
-	private ArrayList<vPiece> vertical = new ArrayList<vPiece>();
-	private ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
+	private static ArrayList<vPiece> vertical = new ArrayList<vPiece>();
+	private static ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
@@ -65,7 +65,8 @@ public class SliderBot1 implements SliderPlayer {
 				 * set the new position to the opponent's piece */
 				switch(move.d) {
 				case UP:
-					if(thePiece == 'V' && move.j == this.gameBoard.getN() - 1) {
+					if(thePiece == Global.V_CELL && move.j == this.gameBoard.getN() - 1) {
+						vertical.remove(find_vPiece(vertical, move));
 						break;
 					}
 					this.gameBoard.enter( thePiece, move.j + 1,move.i);
@@ -77,7 +78,8 @@ public class SliderBot1 implements SliderPlayer {
 					this.gameBoard.enter(thePiece,move.i - 1, move.j);
 					break;
 				case RIGHT:
-					if(thePiece == 'H' && move.i == this.gameBoard.getN() - 1) {
+					if(thePiece == Global.H_CELL && move.i == this.gameBoard.getN() - 1) {
+						horizontal.remove(find_hPiece(horizontal, move));
 						break;
 					}
 					this.gameBoard.enter(thePiece, move.j, move.i + 1);
@@ -97,15 +99,33 @@ public class SliderBot1 implements SliderPlayer {
 	
 	public Move move() {
 		Move chosen;
+		boolean remove;
 		//implement minimax
+		//remove pieces from list if off board
 		chosen = Minimax.choose_move(gameBoard, horizontal, vertical, player);
+		
+		if(chosen == null){
+			return chosen;
+		}
+		
+		printMove(chosen);
+		
 		if(player == Global.H_CELL){
-			change_place(chosen, gameBoard,find_hPiece(horizontal, chosen));
+			hPiece thePiece1 = find_hPiece(horizontal, chosen);
+			remove = change_place(chosen, gameBoard, thePiece1);
+			if(remove){
+				horizontal.remove(thePiece1);
+			}
 		}
 		
 		else{
-			change_place(chosen, gameBoard,find_vPiece(vertical, chosen));
+			vPiece thePiece = find_vPiece(vertical, chosen); 
+			remove = change_place(chosen, gameBoard, thePiece);
+			if(remove){
+				vertical.remove(thePiece);
+			}
 		}
+		
 		
 		return chosen;
 		/*the 'update' should update the state of the board (can be used for any Move) */
@@ -114,7 +134,7 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	//find the piece being moved in the ArrayList of pieces
-	private piece find_vPiece(ArrayList<vPiece> pieces, Move theMove){
+	private vPiece find_vPiece(ArrayList<vPiece> pieces, Move theMove){
 		for(vPiece thePiece : pieces){
 			if(thePiece.getxLoc() == theMove.i){
 				if(thePiece.getyLoc() == theMove.j){
@@ -126,7 +146,7 @@ public class SliderBot1 implements SliderPlayer {
 		return new vPiece(0,0);
 	}
 	
-	private piece find_hPiece(ArrayList<hPiece> pieces, Move theMove){
+	private hPiece find_hPiece(ArrayList<hPiece> pieces, Move theMove){
 		for(hPiece thePiece : pieces){
 			if(thePiece.getxLoc() == theMove.i){
 				if(thePiece.getyLoc() == theMove.j){
@@ -138,8 +158,9 @@ public class SliderBot1 implements SliderPlayer {
 		return new hPiece(0,0);
 	}
 	
-	public static void change_place(Move move, Board board, piece thePiece){
+	public static boolean change_place(Move move, Board board, piece thePiece){
 		char player = Global.V_CELL;
+		boolean remove = false;
 		
 		if(thePiece.isH()){
 			player = Global.H_CELL;
@@ -153,10 +174,11 @@ public class SliderBot1 implements SliderPlayer {
 		
 		switch(move.d){
 			case UP:
+				thePiece.setyLoc(move.j + 1);
 				if(player == Global.V_CELL && move.j == board.getN() - 1){
+					remove = true;
 					break;
 				}
-				thePiece.setyLoc(move.j + 1);
 				board.enter(player,move.j + 1, move.i);
 				break;
 			case DOWN:
@@ -168,13 +190,19 @@ public class SliderBot1 implements SliderPlayer {
 				board.enter(player ,move.j, move.i - 1);
 				break;
 			case RIGHT:
+				thePiece.setxLoc(move.i + 1);
 				if(player == Global.H_CELL && move.i == board.getN() - 1){
+					remove = true;
 					break;
 				}
-				thePiece.setxLoc(move.i + 1);
 				board.enter(player,move.j, move.i + 1);
 				break;
 		}
+		
+		return remove;
 	}
-
+	
+	void printMove(Move move){
+		System.out.printf("x positon: %d,y position: %d, direction: %s\n" , move.i, move.j, move.d);
+	}
 }

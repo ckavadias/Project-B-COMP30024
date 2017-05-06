@@ -45,7 +45,7 @@ public class hPiece extends piece {
 		
 		//check that specified cell is empty
 		try {
-			cell = board.getChar(getxLoc() + horizontal, getyLoc() + vertical);
+			cell = board.getChar(this.getxLoc() + horizontal, this.getyLoc() + vertical);
 			if (cell == '+'){
 				return true;
 			}
