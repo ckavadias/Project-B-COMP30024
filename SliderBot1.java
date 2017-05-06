@@ -67,84 +67,110 @@ public class SliderBot1 implements SliderPlayer {
 					if(this.opponent == 'V' && move.j == this.gameBoard.getN() - 1) {
 						break;
 					}
-					this.gameBoard.setChar(move.i, move.j + 1, this.opponent);
+					this.gameBoard.enter( this.opponent, move.j + 1,move.i);
 					break;
 				case DOWN:
-					this.gameBoard.setChar(move.i, move.j - 1, this.opponent);
+					this.gameBoard.enter( this.opponent, move.j - 1, move.i);
 					break;
 				case LEFT:
-					this.gameBoard.setChar(move.i - 1, move.j, this.opponent);
+					this.gameBoard.enter(this.opponent, move.j,move.i - 1);
 					break;
 				case RIGHT:
 					if(this.opponent == 'H' && move.i == this.gameBoard.getN() - 1) {
 						break;
 					}
-					this.gameBoard.setChar(move.i + 1, move.j, this.opponent);
+					this.gameBoard.enter( this.opponent, move.j, move.i + 1);
 					break;
 				}
 				
 				/* set the old position to blank */
-				this.gameBoard.setChar(move.i, move.j, Global.BLANK);
+				this.gameBoard.enter( Global.BLANK, move.j, move.i);
 			}
 		} catch (Exception e) {
 			e.getMessage();
 		} finally {
 			/********************************************FOR TESTING PURPOSES********************************************/
-			this.gameBoard.print();
+			//this.gameBoard.print();
 		}
 	}
 	
 	public Move move() {
 		Move chosen;
 		//implement minimax
-		if(player == Global.V_CELL){
-			chosen = choose_move(gameBoard, horizontal, vertical);
-			change_place(chosen, gameBoard,find_piece(vertical, chosen));
+		chosen = Minimax.choose_move(gameBoard, horizontal, vertical, player);
+		if(player == Global.H_CELL){
+			change_place(chosen, gameBoard,find_hPiece(horizontal, chosen));
 		}
+		
 		else{
-			chosen = choose_move(gameBoard, vertical, horizontal);
-			change_place(chosen, gameBoard,find_piece(horizontal, chosen));
+			change_place(chosen, gameBoard,find_vPiece(vertical, chosen));
 		}
+		
 		return chosen;
 	}
 	
 	//find the piece being moved in the ArrayList of pieces
-	private piece find_piece(ArrayList pieces, move theMove){
-		for(piece thePiece : pieces){
+	private piece find_vPiece(ArrayList<vPiece> pieces, Move theMove){
+		for(vPiece thePiece : pieces){
 			if(thePiece.getxLoc() == theMove.i){
 				if(thePiece.getyLoc() == theMove.j){
 					return thePiece;
 				}
 			}
 		}
+		
+		return new vPiece(0,0);
 	}
 	
-	public void change_place(Move move, Board board, piece thePiece){
+	private piece find_hPiece(ArrayList<hPiece> pieces, Move theMove){
+		for(hPiece thePiece : pieces){
+			if(thePiece.getxLoc() == theMove.i){
+				if(thePiece.getyLoc() == theMove.j){
+					return thePiece;
+				}
+			}
+		}
+		
+		return new hPiece(0,0);
+	}
+	
+	public static void change_place(Move move, Board board, piece thePiece){
 		char player = Global.V_CELL;
 		
 		if(thePiece.isH()){
 			player = Global.H_CELL;
 		}
 		
-		board[move.i, move.j] = Global.BLANK_CELL;
+		//as this will also be used to reverse updates this condition is necessary to avoid
+		//indedation errors
+		if(move.j < board.getN() && move.i < board.getN()){
+			board.enter(Global.BLANK, move.j, move.i);
+		}
 		
-		switch(move.d):
-			case Move.direction.UP:
+		switch(move.d){
+			case UP:
+				if(player == Global.V_CELL && move.j == board.getN() - 1){
+					break;
+				}
 				thePiece.setyLoc(move.j + 1);
-				board.enter[move.i][move.j + 1] = player;
+				board.enter(player,move.j + 1, move.i);
 				break;
-			case Move.direction.DOWN:
+			case DOWN:
 				thePiece.setyLoc(move.j -1);
-				board.enter[move.i][move.j - 1] = player;
+				board.enter(player,move.j - 1, move.i);
 				break;
-			case Move.direction.LEFT:
+			case LEFT:
 				thePiece.setxLoc(move.i - 1);
-				board.enter[move.i - 1][move.j] = player;
+				board.enter(player ,move.j, move.i - 1);
 				break;
-			case Move.direction.RIGHT:
+			case RIGHT:
+				if(player == Global.H_CELL && move.i == board.getN() - 1){
+					break;
+				}
 				thePiece.setxLoc(move.i + 1);
-				board.enter[move.i + 1][move.j] = player;
+				board.enter(player,move.j, move.i + 1);
 				break;
+		}
 	}
 
 }

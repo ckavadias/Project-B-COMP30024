@@ -3,7 +3,10 @@
  * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
  */
 
-package rtanudjaja.slider;
+package CKRTsliderbot;
+
+import aiproj.slider.Move;
+import aiproj.slider.SliderPlayer;
 
 public abstract class piece {
 	

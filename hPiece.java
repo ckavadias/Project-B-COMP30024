@@ -3,7 +3,10 @@
  * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
  */
 
-package rtanudjaja.slider;
+package CKRTsliderbot;
+
+import aiproj.slider.Move;
+import aiproj.slider.SliderPlayer;
 
 public class hPiece extends piece {
 
@@ -16,20 +19,20 @@ public class hPiece extends piece {
 		char cell;
 		int horizontal = 0, vertical = 0;
 		
-		switch (movement.d):
-			case Move.Direction.UP:
+		switch (movement.d){
+			case UP:
 				vertical = 1;
 				break;
-			case Move.Direction.DOWN:
+			case DOWN:
 				vertical = -1;
 				break;
-			case Move.Direction.LEFT:
+			case LEFT:
 				horizontal = -1;
 				break;
-			case Move.Direction.RIGHT:
+			case RIGHT:
 				horizontal = 1;
 				break;
-				
+		}
 		// can't move to the left and go outside the board in vertical direction
 		if (horizontal < 0 || vertical + this.getyLoc() == board.getN()){
 			return false;

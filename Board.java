@@ -3,7 +3,7 @@
  * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
  */
 
-package rtanudjaja.slider;
+package CKRTsliderbot;
 
 public class Board {
 	

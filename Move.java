@@ -10,7 +10,7 @@
  * created for COMP30024 Artificial Intelligence 2017
  * by Matt Farrugia <matt.farrugia@unimelb.edu.au>
  */
-package CKRTsliderbot;
+package aiproj.slider;
 
 /**
  * Helper class for representing and communicating a move in the game of Slider.
