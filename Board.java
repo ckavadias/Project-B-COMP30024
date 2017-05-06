@@ -19,6 +19,8 @@ public class Board {
 	
 	/* Enter the char character data into the board array */
 	public void enter(char character, int y, int x) {
+		//System.out.println("y="+ y);
+		//System.out.println("x=" + x );
 		gameboard[y][x] = character;
 	}
 

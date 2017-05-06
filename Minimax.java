@@ -317,13 +317,13 @@ private static Move find_opposite(Move theMove){
 	
 	switch (theMove.d){
 		case UP:
-			return new Move(theMove.i - 1, theMove.j, Move.Direction.DOWN);
+			return new Move(theMove.i, theMove.j + 1, Move.Direction.DOWN);
 		case DOWN:
-			return new Move(theMove.i + 1, theMove.j,Move.Direction.UP);
+			return new Move(theMove.i, theMove.j - 1,Move.Direction.UP);
 		case LEFT:
-			return new Move(theMove.i, theMove.j + 1, Move.Direction.RIGHT);
+			return new Move(theMove.i - 1, theMove.j, Move.Direction.RIGHT);
 		case RIGHT:
-			return new Move(theMove.i, theMove.j - 1 ,Move.Direction.LEFT);
+			return new Move(theMove.i + 1, theMove.j ,Move.Direction.LEFT);
 	}
 	
 	return theMove;
