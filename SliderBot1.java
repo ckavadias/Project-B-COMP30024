@@ -68,33 +68,19 @@ public class SliderBot1 implements SliderPlayer {
 					if(thePiece == 'V' && move.j == this.gameBoard.getN() - 1) {
 						break;
 					}
-<<<<<<< HEAD
-					this.gameBoard.enter( this.opponent, move.j + 1,move.i);
+					this.gameBoard.enter( thePiece, move.j + 1,move.i);
 					break;
 				case DOWN:
-					this.gameBoard.enter( this.opponent, move.j - 1, move.i);
+					this.gameBoard.enter(thePiece, move.i, move.j - 1);
 					break;
 				case LEFT:
-					this.gameBoard.enter(this.opponent, move.j,move.i - 1);
-=======
-					this.gameBoard.setChar(move.i, move.j + 1, thePiece);
-					break;
-				case DOWN:
-					this.gameBoard.setChar(move.i, move.j - 1, thePiece);
-					break;
-				case LEFT:
-					this.gameBoard.setChar(move.i - 1, move.j, thePiece);
->>>>>>> origin/master
+					this.gameBoard.enter(thePiece,move.i - 1, move.j);
 					break;
 				case RIGHT:
 					if(thePiece == 'H' && move.i == this.gameBoard.getN() - 1) {
 						break;
 					}
-<<<<<<< HEAD
-					this.gameBoard.enter( this.opponent, move.j, move.i + 1);
-=======
-					this.gameBoard.setChar(move.i + 1, move.j, thePiece);
->>>>>>> origin/master
+					this.gameBoard.enter(thePiece, move.j, move.i + 1);
 					break;
 				}
 				
@@ -110,7 +96,6 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public Move move() {
-<<<<<<< HEAD
 		Move chosen;
 		//implement minimax
 		chosen = Minimax.choose_move(gameBoard, horizontal, vertical, player);
@@ -123,13 +108,9 @@ public class SliderBot1 implements SliderPlayer {
 		}
 		
 		return chosen;
-=======
 		/*the 'update' should update the state of the board (can be used for any Move) */
-		Move selected_move = null;
-		this.update(selected_move);
-		
-		return null;
->>>>>>> origin/master
+		//Move selected_move = null;
+		//this.update(selected_move);
 	}
 	
 	//find the piece being moved in the ArrayList of pieces
