@@ -71,7 +71,6 @@ private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 	Move chosen = null, move = null;
 	Move[] possibles = new Move[3];
 	
-	System.out.println("HORIZONTAL DECISION\n");
 	//create array of possible moves to iterate through
 	
 	if (ply == maxPly){
@@ -130,12 +129,9 @@ private static Move findH_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 				
 			if(thisPiece.move(thisMove, board)){
 				//update board
-				System.out.println("BEFORE");
-				SliderBot1.printMove(thisMove);
-				board.print();
+				
 				SliderBot1.change_place(thisMove, board, thisPiece);
-				System.out.println("AFTER");
-				board.print();
+				
 				//find minimum of the enemy heuristics given this move
 				current = find_max(hPieces, vPieces, ply + 1, board, current, player);
 				
@@ -167,8 +163,7 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 	char player = Global.V_CELL;
 	Move chosen = null, move = null;
 	Move[] possibles = new Move[3];
-	
-	System.out.println("VERTICAL DECISION\n");
+
 	
 	//create array of possible moves to iterate through
 	if (ply == maxPly){
@@ -226,12 +221,8 @@ private static Move findV_min(Board board, ArrayList<hPiece> hPieces, ArrayList<
 				
 			if(thisPiece.move(thisMove, board)){
 				//update board
-				System.out.println("BEFORE");
-				SliderBot1.printMove(thisMove);
-				board.print();
 				SliderBot1.change_place(thisMove, board, thisPiece);
-				System.out.println("AFTER");
-				board.print();
+				
 				//find minimum of the enemy heuristics given this move
 				current = find_max(hPieces, vPieces, ply + 1, board, current, player);
 

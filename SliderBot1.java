@@ -43,10 +43,10 @@ public class SliderBot1 implements SliderPlayer {
 				System.out.printf("%c ",readChar);
 				gameBoard.enter(readChar, y, x);
 				
-				if(gameBoard.getChar(x, y) == 'V'){
+				if(gameBoard.getChar(x, y) == 'V'&& vertical.size() < dimension-1){
 					vertical.add(new vPiece(x, y));
 				}
-				else if(gameBoard.getChar(x, y) == 'H'){
+				else if(gameBoard.getChar(x, y) == 'H' && horizontal.size() < dimension-1){
 					horizontal.add(new hPiece(x, y));
 				}
 			}
@@ -107,8 +107,6 @@ public class SliderBot1 implements SliderPlayer {
 		if(chosen == null){
 			return chosen;
 		}
-		
-		printMove(chosen);
 		
 		if(player == Global.H_CELL){
 			hPiece thePiece1 = find_hPiece(horizontal, chosen);
