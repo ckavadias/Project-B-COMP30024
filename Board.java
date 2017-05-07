@@ -19,8 +19,6 @@ public class Board {
 	
 	/* Enter the char character data into the board array */
 	public void enter(char character, int y, int x) {
-		//System.out.println("y="+ y);
-		//System.out.println("x=" + x );
 		gameboard[y][x] = character;
 	}
 
@@ -43,6 +41,19 @@ public class Board {
 	/* Get the char of the board in x,y position */
 	public char getChar(int x, int y) {
 		return gameboard[y][x];
+	}
+	
+	//print the entire board
+	public void print(){
+		int i,j;
+		System.out.println("Debugging Board");	
+		for(i = n - 1; i >= 0; i--){
+			for(j = 0; j < n; j++){
+				System.out.printf("%c ", gameboard[i][j]);
+			}
+			System.out.println();
+		}
+		System.out.println("Debugging Board");
 	}
 
 }

@@ -72,10 +72,10 @@ public class SliderBot1 implements SliderPlayer {
 					this.gameBoard.enter( thePiece, move.j + 1,move.i);
 					break;
 				case DOWN:
-					this.gameBoard.enter(thePiece, move.i, move.j - 1);
+					this.gameBoard.enter(thePiece, move.j - 1, move.i);
 					break;
 				case LEFT:
-					this.gameBoard.enter(thePiece,move.i - 1, move.j);
+					this.gameBoard.enter(thePiece,move.j, move.i - 1);
 					break;
 				case RIGHT:
 					if(thePiece == Global.H_CELL && move.i == this.gameBoard.getN() - 1) {
@@ -202,7 +202,7 @@ public class SliderBot1 implements SliderPlayer {
 		return remove;
 	}
 	
-	void printMove(Move move){
+	public static void printMove(Move move){
 		System.out.printf("x positon: %d,y position: %d, direction: %s\n" , move.i, move.j, move.d);
 	}
 }
