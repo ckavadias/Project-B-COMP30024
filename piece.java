@@ -38,5 +38,12 @@ public abstract class piece {
 	}
 	
 	public abstract boolean isH();
+	
+	public boolean onBoard(Board board){
+		if(this.yLoc >= board.getN() || this.xLoc >= board.getN()){
+			return false;
+		}
+		return true;
+	}
 
 }

@@ -61,4 +61,5 @@ public class vPiece extends piece {
 	public boolean isH(){
 		return false;
 	}
+	
 }
