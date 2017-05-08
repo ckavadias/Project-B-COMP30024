@@ -259,9 +259,9 @@ private static int find_max(ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces
 		
 		if(player == Global.H_CELL){
 			//return heuristics only
-			for(vPiece thisPiece : vPieces){
+			for(hPiece thisPiece : hPieces){
 			
-				current = heuristicV(board, thisPiece);
+				current = heuristicH(board, thisPiece);
 				if(current < minimum){
 					//pruning condition
 					return minimum;
@@ -275,9 +275,9 @@ private static int find_max(ArrayList<hPiece> hPieces, ArrayList<vPiece> vPieces
 		
 		else{
 			//return heuristics only
-			for(hPiece thisPiece : hPieces){
+			for(vPiece thisPiece : vPieces){
 			
-				current = heuristicH(board, thisPiece);
+				current = heuristicV(board, thisPiece);
 				
 				if(current < minimum){
 					//pruning condition
@@ -342,6 +342,105 @@ private static Move find_opposite(Move theMove){
 	}
 	
 	return theMove;
+}
+
+
+//utility function for minimax, features include number of blocked pieces, pieces in win postion
+//and pieces remaining
+private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces,
+		Board board, char player){
+	double blockedOpps =0.0, piecesWinning =0.0, blockedPieces = 0.0, oppLessPieces = 0.0;
+	int i;
+	
+	if (player == Global.H_CELL){
+		//determine number of blocked opponents
+		for(vPiece thisPiece : vPieces){
+			for(i = thisPiece.getyLoc(); i < board.getN();i++ ){
+				if(board.getChar(thisPiece.getxLoc(), i) != Global.BLANK){
+					blockedOpps++;
+					break;
+				}
+			}
+		}
+		blockedOpps*=0.3;
+		
+		//determine no. pieces in final column
+		for(hPiece thisPiece : hPieces){
+			if(thisPiece.getyLoc() == board.getN() - 1){
+				piecesWinning++;
+			}
+		}
+		piecesWinning*=0.5;
+		
+		//determine no.pieces blocked
+		for(hPiece thisPiece : hPieces){
+			for( i = thisPiece.getxLoc(); i < board.getN(); i++){
+				if(board.getChar(i, thisPiece.getyLoc()) != Global.BLANK){
+					blockedPieces++;
+					break;
+				}
+			}
+		}
+		blockedPieces*=0.4;
+		
+		//determine number of pieces remaining - number oppenent remaing
+		for(hPiece thisPiece : hPieces){
+			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
+				oppLessPieces++;
+			}
+		}
+		for(vPiece thisPiece : vPieces){
+			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
+				oppLessPieces--;
+			}
+		}
+		oppLessPieces*=0.5;
+	}
+	else{
+		//determine number of blocked Pieces
+		for(vPiece thisPiece : vPieces){
+			for(i = thisPiece.getyLoc(); i < board.getN();i++ ){
+				if(board.getChar(thisPiece.getxLoc(), i) != Global.BLANK){
+					blockedPieces++;
+				}
+			}
+		}
+		blockedPieces*=0.4;
+		
+		//determine no. pieces in final row
+		for(vPiece thisPiece : vPieces){
+			if(thisPiece.getxLoc() == board.getN() - 1){
+				piecesWinning++;
+			}
+		}
+		piecesWinning*=0.5;
+		
+		//determine no.pieces opponents
+		for(hPiece thisPiece : hPieces){
+			for( i = thisPiece.getxLoc(); i < board.getN(); i++){
+				if(board.getChar(i, thisPiece.getyLoc()) != Global.BLANK){
+					blockedOpps++;
+					break;
+				}
+			}
+		}
+		blockedOpps*=0.3;
+		
+		//determine number of pieces remaining - number oppenent remaing
+		for(vPiece thisPiece : vPieces){
+			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
+				oppLessPieces--;
+			}
+		}
+		for(vPiece thisPiece : vPieces){
+			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
+				oppLessPieces++;
+			}
+		}
+		oppLessPieces*=0.5;
+		
+	}
+	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces);
 }
 }
 
