@@ -13,12 +13,12 @@ public class RandomBot implements SliderPlayer{
 	private Board gameBoard = null;
 	private char player;
 	private char opponent;
-	private ArrayList<int[]> vertical = new ArrayList<int[]>();
-	private ArrayList<int[]> horizontal = new ArrayList<int[]>();
+	private ArrayList<vPiece> vertical = new ArrayList<vPiece>();
+	private ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
-		System.out.println("player: " + this.player);
+		//System.out.println("player: " + this.player);
 		
 		if(player == Global.H_CELL) {
 			this.opponent = Global.V_CELL;
@@ -26,17 +26,17 @@ public class RandomBot implements SliderPlayer{
 			this.opponent = Global.H_CELL;
 		}
 		
-		System.out.println("opponent: " + this.opponent);
+		//System.out.println("opponent: " + this.opponent);
 		
 		this.gameBoard = new Board(dimension);
-		System.out.println("dimension: " + dimension);
+		//System.out.println("dimension: " + dimension);
 		
 		this.boardScan = new Scanner(board);
 		int x,y;
 		for(y = gameBoard.getN() - 1;y >= 0; y--) {
 			for(x = 0; x < gameBoard.getN(); x++) {
 				char readChar = boardScan.next().charAt(0);
-				System.out.printf("%c ",readChar);
+				//System.out.printf("%c ",readChar);
 				gameBoard.enter(readChar, y, x);
 				
 				//store pieces in easy access ArrayList
@@ -44,14 +44,14 @@ public class RandomBot implements SliderPlayer{
 				location[0] = x;
 				location[1] = y;
 				
-				if(gameBoard.getChar(x, y) == 'V'){
-					vertical.add(location);
+				if(gameBoard.getChar(x, y) == 'V'&& vertical.size() < dimension-1){
+					vertical.add(new vPiece(x, y));
 				}
-				else if(gameBoard.getChar(x, y) == 'H'){
-					horizontal.add(location);
+				else if(gameBoard.getChar(x, y) == 'H' && horizontal.size() < dimension-1){
+					horizontal.add(new hPiece(x, y));
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 	}
 	
@@ -60,38 +60,74 @@ public class RandomBot implements SliderPlayer{
 			if (move == null) {
 				return;
 			} else {
+				char thePiece = this.gameBoard.getChar(move.i, move.j);
 				
+				if(thePiece == Global.V_CELL){
+					vertical.remove(find_vPiece(vertical, move));
+					//vertical.add(new vPiece(move.i, move.j));
+				} else if(thePiece == Global.H_CELL){
+					horizontal.remove(find_hPiece(horizontal, move));
+					//horizontal.add(new hPiece(move.i, move.j));
+				}
+
 				/* switch case for direction the piece is moving 
 				 * set the new position to the opponent's piece */
 				switch(move.d) {
-					case UP:
-						if(this.opponent == 'V' && move.j == this.gameBoard.getN() - 1) {
-							break;
-						}
-						this.gameBoard.setChar(move.i, move.j + 1, this.opponent);
+				case UP:
+					if(thePiece == Global.V_CELL && move.j == this.gameBoard.getN() - 1) {
 						break;
-					case DOWN:
-						this.gameBoard.setChar(move.i, move.j - 1, this.opponent);
+					}
+					
+					if(thePiece == Global.V_CELL){
+						vertical.add(new vPiece( move.i, move.j + 1));
+					} else if(thePiece == Global.H_CELL){
+						horizontal.add(new hPiece(move.i, move.j + 1));
+					}
+					this.gameBoard.enter( thePiece, move.j + 1,move.i);
+					break;
+				case DOWN:
+					
+					if(thePiece == Global.V_CELL){
+						vertical.add(new vPiece(move.i, move.j - 1));
+					} else if(thePiece == Global.H_CELL){
+						horizontal.add(new hPiece(move.i, move.j - 1));
+					}
+					
+					this.gameBoard.enter(thePiece, move.j - 1, move.i);
+					break;
+				case LEFT:
+					
+					if(thePiece == Global.V_CELL){
+						vertical.add(new vPiece(move.i - 1, move.j));
+					} else if(thePiece == Global.H_CELL){
+						horizontal.add(new hPiece(move.i - 1, move.j));
+					}
+					
+					this.gameBoard.enter(thePiece,move.j, move.i - 1);
+					break;
+				case RIGHT:
+					if(thePiece == Global.H_CELL && move.i == this.gameBoard.getN() - 1) {
 						break;
-					case LEFT:
-						this.gameBoard.setChar(move.i - 1, move.j, this.opponent);
-						break;
-					case RIGHT:
-						if(this.opponent == 'H' && move.i == this.gameBoard.getN() - 1) {
-							break;
-						}
-						this.gameBoard.setChar(move.i + 1, move.j, this.opponent);
-						break;
+					}
+					
+					if(thePiece == Global.V_CELL){
+						vertical.add(new vPiece(move.i + 1, move.j));
+					} else if(thePiece == Global.H_CELL){
+						horizontal.add(new hPiece(move.i + 1, move.j));
+					}
+					
+					this.gameBoard.enter(thePiece, move.j, move.i + 1);
+					break;
 				}
 				
 				/* set the old position to blank */
-				this.gameBoard.setChar(move.i, move.j, Global.BLANK);
+				this.gameBoard.enter( Global.BLANK, move.j, move.i);
 			}
 		} catch (Exception e) {
 			e.getMessage();
 		} finally {
 			/********************************************FOR TESTING PURPOSES********************************************/
-			this.gameBoard.print();
+			//this.gameBoard.print();
 		}
 	}
 	
@@ -100,7 +136,7 @@ public class RandomBot implements SliderPlayer{
 		// return null;
 		
 		Move.Direction piece_direction = null;
-		int[] piece_location = null;
+		piece piece_location = null;
 		boolean illegalMove = true;
 		
 		while(illegalMove) {
@@ -118,20 +154,20 @@ public class RandomBot implements SliderPlayer{
 					if (piece_direction.equals(Move.Direction.DOWN)) {
 						continue;
 					} else if(piece_direction.equals(Move.Direction.LEFT)) {
-						if(piece_location[0] == 0) {
+						if(piece_location.getxLoc() == 0) {
 							continue;
-						} else if(this.gameBoard.getChar(piece_location[0] - 1, piece_location[1]) != Global.BLANK) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc() - 1, piece_location.getyLoc()) != Global.BLANK) {
 							continue;
 						}
 					} else if(piece_direction.equals(Move.Direction.RIGHT)) {
-						if(piece_location[0] == this.gameBoard.getN()-1) {
+						if(piece_location.getxLoc() == this.gameBoard.getN()-1) {
 							continue;
-						} else if(this.gameBoard.getChar(piece_location[0] + 1, piece_location[1]) != Global.BLANK) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc() + 1, piece_location.getyLoc()) != Global.BLANK) {
 							continue;
 						}
 					} else if(piece_direction.equals(Move.Direction.UP)) {
-						if (piece_location[1] == this.gameBoard.getN()-1) {
-						} else if(this.gameBoard.getChar(piece_location[0], piece_location[1] + 1) != Global.BLANK) {
+						if (piece_location.getyLoc() == this.gameBoard.getN()-1) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc(), piece_location.getyLoc() + 1) != Global.BLANK) {
 							continue;
 						}
 					}
@@ -143,20 +179,20 @@ public class RandomBot implements SliderPlayer{
 					if (piece_direction.equals(Move.Direction.LEFT)) {
 						continue;
 					} else if(piece_direction.equals(Move.Direction.DOWN)) {
-						if(piece_location[1] == 0) {
+						if(piece_location.getyLoc() == 0) {
 							continue;
-						} else if(this.gameBoard.getChar(piece_location[0], piece_location[1] - 1) != Global.BLANK) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc(), piece_location.getyLoc() - 1) != Global.BLANK) {
 							continue;
 						}
 					} else if(piece_direction.equals(Move.Direction.UP)) {
-						if(piece_location[1] == this.gameBoard.getN()-1) {
+						if(piece_location.getyLoc() == this.gameBoard.getN()-1) {
 							continue;
-						} else if(this.gameBoard.getChar(piece_location[0], piece_location[1] + 1) != Global.BLANK) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc(), piece_location.getyLoc() + 1) != Global.BLANK) {
 							continue;
 						}
 					} else if(piece_direction.equals(Move.Direction.RIGHT)) {
-						if (piece_location[0] == this.gameBoard.getN()-1) {
-						} else if(this.gameBoard.getChar(piece_location[0] + 1, piece_location[1]) != Global.BLANK) {
+						if (piece_location.getxLoc() == this.gameBoard.getN()-1) {
+						} else if(this.gameBoard.getChar(piece_location.getxLoc() + 1, piece_location.getyLoc()) != Global.BLANK) {
 							continue;
 						}
 					}
@@ -167,35 +203,39 @@ public class RandomBot implements SliderPlayer{
 			}
 		}
 		
-		Move selected_move = new Move(piece_location[0],piece_location[1], piece_direction);
+		Move selected_move = new Move(piece_location.getxLoc(),piece_location.getyLoc(), piece_direction);
 		
 		/********************************************FOR TESTING PURPOSES********************************************/
-		System.out.println(selected_move.toString());
+		//System.out.println(selected_move.toString());
 		
 		/* self update the state of the game board */
-		this.gameBoard.setChar(piece_location[0], piece_location[1], Global.BLANK);
-		switch(selected_move.d) {
-		case UP:
-			if(this.player == 'V' && piece_location[1]==this.gameBoard.getN()-1) {
-				break;
-			}
-			this.gameBoard.setChar(piece_location[0], piece_location[1] + 1, this.player);
-			break;
-		case DOWN:
-			this.gameBoard.setChar(piece_location[0], piece_location[1] - 1, this.player);
-			break;
-		case LEFT:
-			this.gameBoard.setChar(piece_location[0] - 1, piece_location[1], this.player);
-			break;
-		case RIGHT:
-			if(this.player == 'H' && piece_location[0]==this.gameBoard.getN()-1) {
-				break;
-			}
-			this.gameBoard.setChar(piece_location[0] + 1, piece_location[1], this.player);
-			break;
-		}
+		this.update(selected_move);
 		
 		return selected_move;
 	}
 	
+	//find the piece being moved in the ArrayList of pieces
+		private vPiece find_vPiece(ArrayList<vPiece> pieces, Move theMove){
+			for(vPiece thePiece : pieces){
+				if(thePiece.getxLoc() == theMove.i){
+					if(thePiece.getyLoc() == theMove.j){
+						return thePiece;
+					}
+				}
+			}
+			
+			return new vPiece(0,0);
+		}
+		
+		private hPiece find_hPiece(ArrayList<hPiece> pieces, Move theMove){
+			for(hPiece thePiece : pieces){
+				if(thePiece.getxLoc() == theMove.i){
+					if(thePiece.getyLoc() == theMove.j){
+						return thePiece;
+					}
+				}
+			}
+			
+			return new hPiece(0,0);
+		}
 }
