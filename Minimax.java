@@ -29,7 +29,7 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces,
 		for(hPiece thisPiece: hPieces){
 			i = 0;
 			//create array of all possible moves for piece
-			for(Move.Direction d : Move.Direction.values()){
+			for(Move.Direction d : Global.H_MOVES){
 				if(d != Move.Direction.LEFT){
 					possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 					i++;
@@ -61,7 +61,7 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces,
 		for(vPiece thisPiece: vPieces){
 			i = 0;
 			//create array of all possible moves for piece
-			for(Move.Direction d : Move.Direction.values()){
+			for(Move.Direction d : Global.V_MOVES){
 				if(d != Move.Direction.DOWN){
 					possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 					i++;
@@ -112,7 +112,7 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 			for(hPiece thisPiece: hPieces){
 				i = 0;
 				//create array of all possible moves for piece
-				for(Move.Direction d : Move.Direction.values()){
+				for(Move.Direction d : Global.H_MOVES){
 					if(d != Move.Direction.LEFT){
 						possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 						i++;
@@ -143,7 +143,7 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 			for(vPiece thisPiece: vPieces){
 				i = 0;
 				//create array of all possible moves for piece
-				for(Move.Direction d : Move.Direction.values()){
+				for(Move.Direction d : Global.V_MOVES){
 					if(d != Move.Direction.DOWN){
 						possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 						i++;
@@ -195,7 +195,7 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 			for(hPiece thisPiece: hPieces){
 				i = 0;
 				//create array of all possible moves for piece
-				for(Move.Direction d : Move.Direction.values()){
+				for(Move.Direction d : Global.H_MOVES){
 					if(d != Move.Direction.LEFT){
 						possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 						i++;
@@ -226,7 +226,7 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 			for(vPiece thisPiece: vPieces){
 				i = 0;
 				//create array of all possible moves for piece
-				for(Move.Direction d : Move.Direction.values()){
+				for(Move.Direction d : Global.V_MOVES){
 					if(d != Move.Direction.DOWN){
 						possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
 						i++;
@@ -282,11 +282,17 @@ private static Move find_opposite(Move theMove){
 //and pieces remaining
 private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces,
 		Board board, char player){
-	double blockedOpps =0.0, piecesWinning =0.0, blockedPieces = 0.0, oppLessPieces = 0.0;
+	double distance = 0.0, blockedOpps =0.0, piecesWinning =0.0, blockedPieces = 0.0, oppLessPieces = 0.0;
 	double piecesLeft = 0.0;
 	int i;
 	
 	if (player == Global.H_CELL){
+		
+		for(hPiece thisPiece : hPieces){
+			distance += board.getN() - thisPiece.getxLoc();
+		}
+		distance*=0.6;
+		
 		//determine number of blocked opponents
 		for(vPiece thisPiece : vPieces){
 			for(i = thisPiece.getyLoc(); i < board.getN();i++ ){
@@ -296,7 +302,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedOpps*=0.3;
+		blockedOpps*=0.1;
 		
 		//determine no. pieces in final column
 		for(hPiece thisPiece : hPieces){
@@ -304,7 +310,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				piecesWinning++;
 			}
 		}
-		piecesWinning*=0.5;
+		piecesWinning*=0.3;
 		
 		//determine no.pieces blocked
 		for(hPiece thisPiece : hPieces){
@@ -315,7 +321,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedPieces*=0.4;
+		blockedPieces*=0.1;
 		
 		//determine number of pieces remaining - number oppenent remaing
 		for(hPiece thisPiece : hPieces){
@@ -329,10 +335,16 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				oppLessPieces--;
 			}
 		}
-		oppLessPieces*=0.5;
-		piecesLeft*=0.6;
+		oppLessPieces*=0.3;
+		piecesLeft*=0.4;
 	}
 	else{
+		
+		for(vPiece thisPiece : vPieces){
+			distance += board.getN() - thisPiece.getyLoc();
+		}
+		distance*=0.6;
+		
 		//determine number of blocked Pieces
 		for(vPiece thisPiece : vPieces){
 			for(i = thisPiece.getyLoc(); i < board.getN();i++ ){
@@ -341,7 +353,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedPieces*=0.4;
+		blockedPieces*=0.1;
 		
 		//determine no. pieces in final row
 		for(vPiece thisPiece : vPieces){
@@ -349,7 +361,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				piecesWinning++;
 			}
 		}
-		piecesWinning*=0.5;
+		piecesWinning*=0.3;
 		
 		//determine no.pieces opponents
 		for(hPiece thisPiece : hPieces){
@@ -360,7 +372,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedOpps*=0.6;
+		blockedOpps*=0.1;
 		
 		//determine number of pieces remaining - number oppenent remaing
 		for(vPiece thisPiece : vPieces){
@@ -374,11 +386,11 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				piecesLeft++;
 			}
 		}
-		piecesLeft*=0.6;
-		oppLessPieces*=0.5;
+		piecesLeft*=0.4;
+		oppLessPieces*=0.3;
 		
 	}
-	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces-piecesLeft);
+	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces-piecesLeft-distance);
 }
 }
 
