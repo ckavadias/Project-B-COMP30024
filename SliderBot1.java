@@ -22,7 +22,6 @@ public class SliderBot1 implements SliderPlayer {
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
-		System.out.println("player: " + this.player);
 		
 		if(player == Global.H_CELL) {
 			this.opponent = Global.V_CELL;
@@ -30,17 +29,13 @@ public class SliderBot1 implements SliderPlayer {
 			this.opponent = Global.H_CELL;
 		}
 		
-		System.out.println("opponent: " + this.opponent);
-		
 		this.gameBoard = new Board(dimension);
-		System.out.println("dimension: " + dimension);
 		
 		this.boardScan = new Scanner(board);
 		int x,y;
 		for(y = gameBoard.getN() - 1;y >= 0; y--) {
 			for(x = 0; x < gameBoard.getN(); x++) {
 				char readChar = boardScan.next().charAt(0);
-				System.out.printf("%c ",readChar);
 				gameBoard.enter(readChar, y, x);
 				
 				if(gameBoard.getChar(x, y) == 'V'&& vertical.size() < dimension-1){
@@ -50,7 +45,6 @@ public class SliderBot1 implements SliderPlayer {
 					horizontal.add(new hPiece(x, y));
 				}
 			}
-			System.out.println();
 		}
 	}
 	
@@ -80,9 +74,6 @@ public class SliderBot1 implements SliderPlayer {
 			}
 		} catch (Exception e) {
 			e.getMessage();
-		} finally {
-			/********************************************FOR TESTING PURPOSES********************************************/
-			//this.gameBoard.print();
 		}
 	}
 	
