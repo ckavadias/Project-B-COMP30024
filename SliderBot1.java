@@ -55,39 +55,28 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public void update(Move move) {
+		boolean remove = false;
+		
 		try {
 			if (move == null) {
 				return;
 			} else {
-				char thePiece = this.gameBoard.getChar(move.i, move.j);
-
-				/* switch case for direction the piece is moving 
-				 * set the new position to the opponent's piece */
-				switch(move.d) {
-				case UP:
-					if(thePiece == Global.V_CELL && move.j == this.gameBoard.getN() - 1) {
-						vertical.remove(find_vPiece(vertical, move));
-						break;
+				char player = this.gameBoard.getChar(move.i, move.j);
+				if(player == Global.H_CELL){
+					hPiece thePiece1 = find_hPiece(horizontal, move);
+					remove = change_place(move, gameBoard, thePiece1);
+					if(remove){
+						horizontal.remove(thePiece1);
 					}
-					this.gameBoard.enter( thePiece, move.j + 1,move.i);
-					break;
-				case DOWN:
-					this.gameBoard.enter(thePiece, move.j - 1, move.i);
-					break;
-				case LEFT:
-					this.gameBoard.enter(thePiece,move.j, move.i - 1);
-					break;
-				case RIGHT:
-					if(thePiece == Global.H_CELL && move.i == this.gameBoard.getN() - 1) {
-						horizontal.remove(find_hPiece(horizontal, move));
-						break;
-					}
-					this.gameBoard.enter(thePiece, move.j, move.i + 1);
-					break;
 				}
 				
-				/* set the old position to blank */
-				this.gameBoard.enter( Global.BLANK, move.j, move.i);
+				else{
+					vPiece thePiece = find_vPiece(vertical, move); 
+					remove = change_place(move, gameBoard, thePiece);
+					if(remove){
+						vertical.remove(thePiece);
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.getMessage();
@@ -126,9 +115,6 @@ public class SliderBot1 implements SliderPlayer {
 		
 		
 		return chosen;
-		/*the 'update' should update the state of the board (can be used for any Move) */
-		//Move selected_move = null;
-		//this.update(selected_move);
 	}
 	
 	//find the piece being moved in the ArrayList of pieces
