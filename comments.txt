@@ -1,0 +1,6 @@
+OUR NEW SLIDER BOT: CKRTsliderbot
+
+design comments:
+(generally use minimax)
+
+pseudocode:
