@@ -10,7 +10,7 @@ import aiproj.slider.SliderPlayer;
 
 public final class Minimax {
 
-private static int maxPly = 2;
+private static int maxPly = 3;
 
 
 //choose piece to minimax and return chosen move
@@ -115,6 +115,7 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 				for(Move.Direction d : Move.Direction.values()){
 					if(d != Move.Direction.LEFT){
 						possibles[i] = new Move(thisPiece.getxLoc(), thisPiece.getyLoc(), d);
+						i++;
 					}
 				}
 				
@@ -282,6 +283,7 @@ private static Move find_opposite(Move theMove){
 private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces,
 		Board board, char player){
 	double blockedOpps =0.0, piecesWinning =0.0, blockedPieces = 0.0, oppLessPieces = 0.0;
+	double piecesLeft = 0.0;
 	int i;
 	
 	if (player == Global.H_CELL){
@@ -319,6 +321,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 		for(hPiece thisPiece : hPieces){
 			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
 				oppLessPieces++;
+				piecesLeft++;
 			}
 		}
 		for(vPiece thisPiece : vPieces){
@@ -327,6 +330,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 			}
 		}
 		oppLessPieces*=0.5;
+		piecesLeft*=0.6;
 	}
 	else{
 		//determine number of blocked Pieces
@@ -356,7 +360,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedOpps*=0.3;
+		blockedOpps*=0.6;
 		
 		//determine number of pieces remaining - number oppenent remaing
 		for(vPiece thisPiece : vPieces){
@@ -367,12 +371,14 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 		for(vPiece thisPiece : vPieces){
 			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
 				oppLessPieces++;
+				piecesLeft++;
 			}
 		}
+		piecesLeft*=0.6;
 		oppLessPieces*=0.5;
 		
 	}
-	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces);
+	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces-piecesLeft);
 }
 }
 
