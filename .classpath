@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="javatuples-1.2/dist/javatuples-1.2-javadoc.jar"/>
-	<classpathentry kind="lib" path="javatuples-1.2/dist/javatuples-1.2-sources.jar"/>
-	<classpathentry kind="lib" path="javatuples-1.2/dist/javatuples-1.2.jar"/>
-	<classpathentry kind="lib" path="javatuples-1.2/lib/javatuples-1.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
