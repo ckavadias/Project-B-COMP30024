@@ -1,6 +1,27 @@
-OUR NEW SLIDER BOT: CKRTsliderbot
+Constantinos Kavadias: ckavadias 664790
+Ricky Tanudjaja: rtanudjaja 
 
-design comments:
-(generally use minimax)
+Submitted Package: CKRTsliderbot
 
-pseudocode:
+Design comments:
+Our game player design centred around the use of the minimax algorithm in order to make near optimal game play decisions. This relies heavily on the minimax class contained in our package which handles, utility calculation and the minimax depth search also. The utility function used for our minimax algorithm measures certain attributes about a specific board configuration and how they relate to the specified player (V or H), these attributes include combined distance of all player pieces from their relative “end” of the board (or final move position), how many opponent pieces have a block(this includes another piece) in their path, how many of the players pieces are in the final/row column relative to which player we are, how many of the player’s pieces have a block in their path, the difference in the number of pieces the player and opponent have left and the number of the pieces the player has left. Each of these factors have been given a weight that while slightly arbitrary are based on which we deemed more important, with the “more important” factors being given higher weightings. Another key design factor in our minimax algorithm was the order in which the moves are tested with a preference for RIGHT for horizontal pieces and UP for vertical pieces as they are more likely to result in success and will assist in the implementation of an effective pruning.
+During our design phase Ricky implemented a secondary player that made random moves in order to draw a comparison of the effectiveness and optimality of our minimax bot which led to several revisions of our utility function. We also implemented, for statistical purposes, a script to run our bot multiple times in succession to see if our algorithm was biased to a particular player and hence sub-optimal when not playing as that player. This showed a higher percentage of wins when playing as horizontal however this is expected as in a game like slider the first player is more likely to win and horizontal had a higher percentage of starts than vertical, further analysis showed no bias in our design.
+In terms of our internal representation we made use of ArrayList structures in order  to keep track of the pieces on the board without having to search the whole board everytime an edit was needed (which is often in the minimax algorithm)and a basic array structure to store the board itself.
+
+Pseudocode:
+
+Call SliderBot1.move
+	Call Minimax.choose_move
+		select move with the maximum minimax value
+	If selected move is null 
+		return immediately 
+	Else 
+		update game board and appropriate ArrayList
+	return selected move
+
+Call SliderBot1.update
+	If move == NULL
+		return, no update to perform
+	Else 
+		update game board and appropriate ArrayList 
+	return
