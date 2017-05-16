@@ -41,7 +41,7 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces,
 				if(thisPiece.move(thisMove, board)){
 					//change board to find new utility
 					SliderBot1.change_place(thisMove, board, thisPiece);
-					current = find_max(vPieces, hPieces, board, player, ply + 1);
+					current = find_max(vPieces, hPieces, board, player, ply + 1, current);
 				
 					//check if this is the highest found
 					if(Double.compare(current, maximum) > 0){
@@ -73,7 +73,7 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces,
 				if(thisPiece.move(thisMove, board)){
 					//change board to find new utility
 					SliderBot1.change_place(thisMove, board, thisPiece);
-					current = find_max(vPieces, hPieces, board, player, ply + 1);
+					current = find_max(vPieces, hPieces, board, player, ply + 1, current);
 				
 					//check if this is the highest found
 					if(Double.compare(current, maximum) > 0){
@@ -91,9 +91,9 @@ public static Move choose_move(Board board, ArrayList<hPiece> hPieces,
 	
 	return chosen;
 }
-
+//prune where less than the maximum
 private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces, 
-		Board board, char player, int ply){
+		Board board, char player, int ply, double maximum){
 	
 	int i;
 	double current, minimum = 100.00;
@@ -124,7 +124,7 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 					if(thisPiece.onBoard(board) && thisPiece.move(thisMove, board)){
 						//change board to find new utility
 						SliderBot1.change_place(thisMove, board, thisPiece);
-						current = find_min(vPieces, hPieces, board, player, ply + 1);
+						current = find_min(vPieces, hPieces, board, player, ply + 1, current);
 					
 						//check if this is the lowest found
 						if(Double.compare(current, minimum) < 0){
@@ -133,6 +133,10 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 						//change board back
 						move = find_opposite(thisMove);
 						SliderBot1.change_place(move, board, thisPiece);
+						
+						if(Double.compare(current, maximum) < 0){
+							return maximum;
+						}
 					}
 				}
 			}
@@ -155,7 +159,7 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 					if(thisPiece.onBoard(board) && thisPiece.move(thisMove, board)){
 						//change board to find new utility
 						SliderBot1.change_place(thisMove, board, thisPiece);
-						current = find_min(vPieces, hPieces, board, player, ply + 1);
+						current = find_min(vPieces, hPieces, board, player, ply + 1, current);
 					
 						//check if this is the lowest found
 						if(Double.compare(current, minimum) < 0){
@@ -164,6 +168,10 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 						//change board back
 						move = find_opposite(thisMove);
 						SliderBot1.change_place(move, board, thisPiece);
+						
+						if(Double.compare(current, maximum) < 0){
+							return maximum;
+						}
 					}
 				}
 			
@@ -174,9 +182,9 @@ private static double find_max(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 	}
 	
 }
-
+//prune where greater than the minimum
 private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces, 
-		Board board, char player, int ply){
+		Board board, char player, int ply, double minimum){
 	
 	int i = 0;
 	double current, maximum = 100.00;
@@ -207,8 +215,7 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 					if(thisPiece.onBoard(board) && thisPiece.move(thisMove, board)){
 						//change board to find new utility
 						SliderBot1.change_place(thisMove, board, thisPiece);
-						current = find_max(vPieces, hPieces, board, player, ply);
-					
+						current = find_max(vPieces, hPieces, board, player, ply, current);
 						//check if this is the lowest found
 						if(Double.compare(current, maximum) > 0){
 							maximum = current;
@@ -216,6 +223,11 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 						//change board back
 						move = find_opposite(thisMove);
 						SliderBot1.change_place(move, board, thisPiece);
+						
+						if(Double.compare(current, minimum) > 0){
+							return minimum;
+						}
+						
 					}
 				}
 			}
@@ -238,7 +250,7 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 					if(thisPiece.onBoard(board) && thisPiece.move(thisMove, board)){
 						//change board to find new utility
 						SliderBot1.change_place(thisMove, board, thisPiece);
-						current = find_max(vPieces, hPieces, board, player, ply);
+						current = find_max(vPieces, hPieces, board, player, ply, current);
 					
 						//check if this is the lowest found
 						if(Double.compare(current, maximum) > 0){
@@ -247,6 +259,10 @@ private static double find_min(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPie
 						//change board back
 						move = find_opposite(thisMove);
 						SliderBot1.change_place(move, board, thisPiece);
+						
+						if(Double.compare(current, minimum) > 0){
+							return minimum;
+						}
 					}
 				}
 			
