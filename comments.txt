@@ -1,0 +1,84 @@
+Constantinos Kavadias: ckavadias 664790
+Ricky Tanudjaja: rtanudjaja 773597
+
+Submitted Package: CKRTsliderbot
+
+Design comments:
+Our game player design centred around the use of the Minimax algorithm in order
+to make near optimal game play decisions. This relies heavily on the Minimax
+class contained in our package which handles, utility calculation and the
+Minimax depth search also.
+
+Our program begins with implementing a different algorithm depending on the
+state of the game. The first state is the opening move where the player can move
+all each pieces as close to the goal as possible without it being blocked.
+Once all the pieces are blocked, the program switches to utilise Minimax
+algorithm to find the best Move to be made.
+
+The reason we implemented this stage is because our observations of the game
+and also our own experience playing the game with the computer and with each
+other shows that the best moves to be made in the opening stage of the game is
+to move as close to the goal as possible. It also has an additional benefit of
+saving space from the stack by reducing Minimax calls.
+
+The utility function used for our Minimax algorithm measures certain attributes
+about a specific board configuration and how they relate to the specified player
+(V or H), these attributes include:
+		1. combined distance of all player pieces from their relative
+		"end" of the board (or final move position),
+		2. how many opponent pieces have a block (this includes
+		another piece) in their path,
+		3. how many of the players pieces are in the final/row
+		column relative to which player we are,
+		4. how many of the player's pieces have a block in their path,
+		5. the difference in the number of pieces the player and opponent
+		have left and the number of the pieces the player has left.
+
+Each of these factors have been given a weight that while slightly arbitrary
+are based on which we deemed more important, with the "more important" factors
+being given higher weightings.
+
+Another key design factor in our Minimax algorithm was the order in which the
+moves are tested with a preference for RIGHT for horizontal pieces and
+UP for vertical pieces as they are more likely to result in success and
+will assist in the implementation of an effective pruning.
+
+During our design phase, we also implemented a secondary player that made random
+moves in order to draw a comparison of the effectiveness and optimality of our
+Minimax bot which led to several revisions of our utility function. This
+sliderplayer class is called RandomBot.java.
+
+We also implemented, for statistical purposes, a script to run our bot multiple
+times in succession called MultipleMain.java (created from the
+aiproj.slider.Reference class) to see if our algorithm was biased to a particular
+player and hence sub-optimal when not playing as that player. This showed a
+higher percentage of wins when playing as horizontal however this is expected as
+in a game like slider the first player is more likely to win and horizontal had
+a higher percentage of starts than vertical, further analysis showed no bias in
+our design.
+
+In terms of our internal representation we made use of ArrayList structures in
+order  to keep track of the pieces on the board without having to search the
+whole board everytime an edit was needed (which is often in the Minimax
+algorithm)and a basic array structure to store the board itself.
+
+Pseudocode:
+
+Call SliderBot2.move
+	if(openingMove)
+		implement opening move //move as Right/Up as possible
+
+	if(!openingMove)
+		Call Minimax.choose_move
+			select move with the maximum Minimax value
+		If selected move is null
+			return immediately
+		Else
+			update game board and appropriate ArrayList
+		return selected move
+
+Call SliderBot2.update
+	If move == NULL
+		return, no update to perform
+	Else
+		update game board and appropriate ArrayList
