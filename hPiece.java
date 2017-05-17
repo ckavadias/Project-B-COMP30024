@@ -6,7 +6,6 @@
 package CKRTsliderbot;
 
 import aiproj.slider.Move;
-import aiproj.slider.SliderPlayer;
 
 public class hPiece extends piece {
 

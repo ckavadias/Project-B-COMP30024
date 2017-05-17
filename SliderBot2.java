@@ -10,20 +10,21 @@ import java.util.ArrayList;
 
 import aiproj.slider.Move;
 import aiproj.slider.SliderPlayer;
+
 /** 
- * SliderBot1 class: This bot plays the game of Slider
+ * SliderBot2 class: This bot plays the game of Slider
  * with the A* algorithm to determine the best path
  * and use random pieces chosen to choose the piece to move
  */
-public class SliderBot1 implements SliderPlayer {
+public class SliderBot2 implements SliderPlayer {
 	
 	/* attributes */
 	private Scanner boardScan = null;
 	private Board gameBoard = null;
 	private char player;
+	private boolean openingMove = true;
 	private static ArrayList<vPiece> vertical = new ArrayList<vPiece>();
 	private static ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
-
 	
 	public void init(int dimension, String board, char player) {
 		
@@ -81,11 +82,21 @@ public class SliderBot1 implements SliderPlayer {
 	}
 	
 	public Move move() {
-		Move chosen;
+		Move chosen = null;
 		boolean remove;
-		//implement minimax
-		//remove pieces from list if off board
-		chosen = Minimax.choose_move(gameBoard, horizontal, vertical, player);
+		
+		if(openingMove) {
+			/* in the initial stage of the game, try to move as right/up as possible 
+			 * starting from the pieces at the bottom */
+			chosen = OpeningMove.chooseOpeningMove(gameBoard, horizontal, vertical, player);
+			openingMove = OpeningMove.checkOpeningMove(gameBoard, horizontal, vertical, player);
+		}
+		
+		if(!openingMove) {
+			//implement minimax
+			//remove pieces from list if off board
+			chosen = Minimax.choose_move(gameBoard, horizontal, vertical, player);
+		}
 		
 		if(chosen == null){
 			return chosen;
@@ -106,7 +117,6 @@ public class SliderBot1 implements SliderPlayer {
 				vertical.remove(thePiece);
 			}
 		}
-		
 		
 		return chosen;
 	}

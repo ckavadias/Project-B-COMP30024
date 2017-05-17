@@ -1,3 +1,8 @@
+/**
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
+ */
+
 package CKRTsliderbot;
 
 import aiproj.slider.Move;

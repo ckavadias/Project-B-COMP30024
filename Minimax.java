@@ -1,7 +1,12 @@
 /**
- This class contains methods to implement minimax algorithm for a slider game
- initially for 2ply 
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
  */
+
+/**
+ * This class contains methods to implement minimax algorithm for a slider game
+ */
+
 package CKRTsliderbot;
 
 import java.util.ArrayList;
@@ -9,7 +14,7 @@ import aiproj.slider.Move;
 
 public final class Minimax {
 
-private static int maxPly = 5;
+private static int maxPly = 6;
 
 //choose piece to minimax and return chosen move
 public static Move choose_move(Board board, ArrayList<hPiece> hPieces, 
@@ -359,7 +364,6 @@ private static Move find_opposite(Move theMove){
 private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPieces,
 		Board board, char player){
 	double distance = 0.0, blockedOpps =0.0, piecesWinning =0.0, blockedPieces = 0.0, oppLessPieces = 0.0;
-	double piecesLeft = 0.0;
 	int i;
 	
 	if (player == Global.H_CELL){
@@ -367,18 +371,18 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 		for(hPiece thisPiece : hPieces){
 			distance += board.getN() - thisPiece.getxLoc();
 		}
-		distance*=0.7;
+		distance*=2.0;
 		
 		//determine number of blocked opponents
 		for(vPiece thisPiece : vPieces){
-			for(i = thisPiece.getyLoc(); i < board.getN();i++ ){
-				if(board.getChar(thisPiece.getxLoc(), i) != Global.BLANK){
+			for(i = 0; i < thisPiece.getyLoc(); i++){
+				if(board.getChar(thisPiece.getxLoc(), i) == Global.V_CELL){
 					blockedOpps++;
 					break;
 				}
 			}
 		}
-		blockedOpps*=0.1;
+		blockedOpps*=0.2;
 		
 		//determine no. pieces in final column
 		for(hPiece thisPiece : hPieces){
@@ -386,7 +390,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				piecesWinning++;
 			}
 		}
-		piecesWinning*=0.3;
+		piecesWinning*=0.5;
 		
 		//determine no.pieces blocked
 		for(hPiece thisPiece : hPieces){
@@ -397,29 +401,22 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedPieces*=0.2;
+		blockedPieces*=0.3;
 		
 		//determine number of pieces remaining - number oppenent remaing
-		for(hPiece thisPiece : hPieces){
-			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
-				oppLessPieces++;
-				piecesLeft++;
-			}
-		}
 		for(vPiece thisPiece : vPieces){
 			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
 				oppLessPieces--;
 			}
 		}
-		oppLessPieces*=0.3;
-		piecesLeft*=0.5;
+		oppLessPieces*=0.1;
 	}
 	else{
 		
 		for(vPiece thisPiece : vPieces){
 			distance += board.getN() - thisPiece.getyLoc();
 		}
-		distance*=0.7;
+		distance*=2.0;
 		
 		//determine number of blocked Pieces
 		for(vPiece thisPiece : vPieces){
@@ -429,7 +426,7 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				}
 			}
 		}
-		blockedPieces*=0.2;
+		blockedPieces*=0.3;
 		
 		//determine no. pieces in final row
 		for(vPiece thisPiece : vPieces){
@@ -437,36 +434,29 @@ private static double utility(ArrayList<vPiece> vPieces, ArrayList<hPiece> hPiec
 				piecesWinning++;
 			}
 		}
-		piecesWinning*=0.3;
+		piecesWinning*=0.5;
 		
 		//determine no.pieces opponents
 		for(hPiece thisPiece : hPieces){
-			for( i = thisPiece.getxLoc(); i < board.getN(); i++){
-				if(board.getChar(i, thisPiece.getyLoc()) != Global.BLANK){
+			for( i = 0; i < thisPiece.getxLoc(); i++){
+				if(board.getChar(i, thisPiece.getyLoc()) == Global.H_CELL){
 					blockedOpps++;
 					break;
 				}
 			}
 		}
-		blockedOpps*=0.1;
+		blockedOpps*=0.2;
 		
-		//determine number of pieces remaining - number oppenent remaing
+		//determine number of oppenent pieces remaining
 		for(vPiece thisPiece : vPieces){
 			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
 				oppLessPieces--;
 			}
 		}
-		for(vPiece thisPiece : vPieces){
-			if(thisPiece.getxLoc() < board.getN() && thisPiece.getyLoc() < board.getN()){
-				oppLessPieces++;
-				piecesLeft++;
-			}
-		}
-		piecesLeft*=0.5;
-		oppLessPieces*=0.3;
+		oppLessPieces*=0.1;
 		
 	}
-	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces-piecesLeft-distance);
+	return (blockedOpps+piecesWinning-blockedPieces+oppLessPieces-distance);
 }
 }
 

@@ -1,3 +1,8 @@
+/**
+ * Name: Constantinos Kavadias (LoginID: ckavadias 664790)
+ * Name: Ricky Tanudjaja (LoginID: rtanudjaja 773597)
+ */
+
 package CKRTsliderbot;
 
 import java.util.ArrayList;
@@ -12,19 +17,12 @@ public class RandomBot implements SliderPlayer{
 	private Scanner boardScan = null;
 	private Board gameBoard = null;
 	private char player;
-	private char opponent;
 	private ArrayList<vPiece> vertical = new ArrayList<vPiece>();
 	private ArrayList<hPiece> horizontal = new ArrayList<hPiece>();
 	
 	public void init(int dimension, String board, char player) {
 		this.player = player;
 		//System.out.println("player: " + this.player);
-		
-		if(player == Global.H_CELL) {
-			this.opponent = Global.V_CELL;
-		} else {
-			this.opponent = Global.H_CELL;
-		}
 		
 		//System.out.println("opponent: " + this.opponent);
 		
